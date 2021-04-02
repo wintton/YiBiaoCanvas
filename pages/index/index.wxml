@@ -1,0 +1,12 @@
+ 
+  <view class="flex_column flex_center" style="height:20vh">
+    <text hidden="{{usetimestr.length == 0}}" class="text_hint">当前已使用</text>
+    <text class="text_name">{{usetimestr}}</text>
+  </view>
+
+  <view style="width:100vw;height:50vh;" class="flex_column flex_center">
+    <canvas canvas-id="circle" style="width:70vw;height:70vw;"></canvas>
+  </view>
+
+  <view bindtap="doRefresh" class="btn_class">刷新</view> 
+

@@ -1,0 +1,42 @@
+/* pages/devdetail/devdetail.wxss */
+
+page{
+  background: #fff;
+}
+
+.text_hint{ 
+  font-size:80%;
+  font-family:PingFang SC;
+  font-weight:500;
+  color:rgba(204,204,204,1);
+}
+
+.text_name{ 
+  margin-top: 5px;
+  font-size:100%;
+  font-family:PingFang SC;
+  font-weight:500;
+  color:rgba(0,0,0,1);
+}
+
+.btn_class{
+  width:30vw;
+  margin-top: 3vh;
+  padding: 5vw;
+  margin-left: 30vw;
+  background:rgba(0,168,255,1);
+  box-shadow:0px 10px 30px 0px rgba(0,168,255,0.4);
+  border-radius:60px;
+  color: #fff;
+  text-align: center;
+}
+
+.flex_column{
+ display: flex;
+ flex-direction: column; 
+}
+
+.flex_center{
+  justify-content: center;
+  align-items: center
+}
