@@ -5,7 +5,7 @@
   </view>
 
   <view style="width:100vw;height:50vh;" class="flex_column flex_center">
-    <canvas canvas-id="circle" style="width:70vw;height:70vw;"></canvas>
+    <canvas bindtouchmove="doTouchMove" bindtouchstart="doTouchStart"   canvas-id="circle" style="width:70vw;height:70vw;"></canvas>
   </view>
 
   <view bindtap="doRefresh" class="btn_class">刷新</view> 

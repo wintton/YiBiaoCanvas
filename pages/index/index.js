@@ -3,6 +3,8 @@
 const app = getApp()
 var mTimer = {};
 var curtemp = 0;
+var lasttime = 0;
+
 Page({
   data: {
    
@@ -12,19 +14,119 @@ Page({
     drawCircle({
 
     },this);
-    mTimer =  setInterval(function(res){
-      curtemp++;
-      if(curtemp > 300){
-        curtemp = 0;
-      }
+    // mTimer =  setInterval(function(res){
+    //   curtemp++;
+    //   if(curtemp > 300){
+    //     curtemp = 0;
+    //   }
       
-      drawCircle({
-        curtemp
-      },that);
-    },500,1000);
+    //   drawCircle({
+    //     curtemp
+    //   },that);
+    // },500,1000);
   }, 
   onUnload:function(res){
       clearInterval(mTimer);
+  },
+  doTouchStart:function(res){
+    this.doTouchMove(res);
+  },
+  //监听触发事件
+  doTouchMove:function(res){ 
+    let nowtime = (new Date()).getTime();
+
+    //100ms触发一次 减少不必要的绘图
+    if(nowtime - lasttime < 100){ 
+      return;
+    }
+    lasttime = nowtime;
+    console.log(res);
+
+     let x  = res.touches[0].x;
+     let y  = res.touches[0].y;
+
+     let width = app.globalData.width * 0.7;
+     let height = app.globalData.width * 0.7;
+   
+    //获取中心坐标
+    let centerPoint = {
+      x: width / 2,
+      y: height / 2
+    }
+
+    //刻度起点坐标
+    let startPoint = {
+      x:centerPoint.x - centerPoint.x * Math.sin(Math.PI / 4),
+      y:centerPoint.y + centerPoint.y * Math.cos(Math.PI / 4),
+    }
+
+    let line = 30; //每根线的长度
+
+    //最大圆的距离
+    let maxDistance = centerPoint.y;
+
+    //最小圆的距离
+    let minDistance = centerPoint.y - line;
+
+    //计算到圆心的距离
+    let distance = Math.sqrt(Math.pow(centerPoint.x - x,2) + Math.pow(centerPoint.y - y,2));
+
+    //触摸点再刻度上
+    if(distance <= maxDistance && distance >= minDistance){
+
+      //最大温度值
+      let maxTemp = 300;  
+
+      //当前触摸点与起点之间的夹角度数
+      let curtemp = 0;    
+      let offset = 0;
+
+      //去掉不显示刻度的区域点击
+      if(x > (startPoint.x + offset) && x < (centerPoint.x * 2 - (startPoint.x + offset) ) && y > centerPoint.y){
+        return;
+     }
+
+    //判断区域
+
+    let targetPoint = {
+      x:0,
+      y:0,
+      angle:0,
+    }
+
+    if(x < startPoint.x && y > centerPoint.y){
+      //从左往右第一个区域
+      targetPoint.x = startPoint.x;
+      targetPoint.y = startPoint.y;
+      targetPoint.angle = 0;
+    } else if (x < centerPoint.x && y < centerPoint.y){
+      //从左往右第二个区域
+      targetPoint.x = 0;
+      targetPoint.y = centerPoint.y;
+      targetPoint.angle = Math.PI / 4;
+    } else if (x > centerPoint.x && y < centerPoint.y){
+      //从左往右第三个区域
+      targetPoint.x = centerPoint.x;
+      targetPoint.y = 0;
+      targetPoint.angle =  (Math.PI * 3) / 4;
+    } else if (x > centerPoint.x && y > centerPoint.y){
+      //从左往右第四个区域
+      targetPoint.x = centerPoint.x * 2;
+      targetPoint.y = centerPoint.y;
+      targetPoint.angle =  (Math.PI * 5) / 4;
+    } 
+
+    //计算玄长
+    let xuanDistance = Math.sqrt(Math.pow(targetPoint.x - x,2) + Math.pow(targetPoint.y - y,2));
+
+    //计算夹角
+    let jiaoDu = Math.asin((xuanDistance / 2) / centerPoint.y ) * 2 + targetPoint.angle;
+  
+      curtemp = ((jiaoDu / (Math.PI * 3 / 2)) * maxTemp).toFixed(0);
+      drawCircle({curtemp },this); 
+
+    } 
+
   }
 })
 
